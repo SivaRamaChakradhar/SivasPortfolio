@@ -1,6 +1,7 @@
+import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 
-export async function POST(req) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
@@ -14,18 +15,19 @@ export async function POST(req) {
       visitedAt: new Date(),
     });
 
-    return Response.json({
+    return NextResponse.json({
       success: true,
     });
 
-  } catch (error) {
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
 
-    console.log(error);
+    console.log(message);
 
-    return Response.json(
+    return NextResponse.json(
       {
         success: false,
-        error: error.message,
+        error: message,
       },
       {
         status: 500,
