@@ -31,8 +31,10 @@ body {
 
 @layer components{
   .identity-gate{
-    @apply relative flex min-h-screen h-dvh w-full flex-col items-center justify-start overflow-x-hidden overflow-y-auto bg-[#050816] text-white isolate;
+    @apply relative flex min-h-screen h-dvh w-full flex-col items-center justify-center overflow-x-hidden overflow-y-auto bg-[#050816] text-white isolate;
     padding: clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 4vw, 3rem);
+    padding-top: clamp(1.5rem, 4vw, 5rem);
+    padding-bottom: clamp(3rem, 8vw, 6rem);
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
     scroll-behavior: smooth;
@@ -79,8 +81,7 @@ body {
 
   .glow-card{
     @apply relative z-10 flex w-full max-w-5xl flex-col items-center justify-center gap-6 rounded-[22px] border border-white/10 bg-white/5 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.25)] backdrop-blur-2xl transition duration-500 ease-out;
-    margin-top: 5.5rem;
-    margin-bottom: 10rem;
+    margin: 0 auto;
     animation: fadeInUp 0.9s ease both;
   }
 
@@ -332,26 +333,42 @@ body {
     @apply w-full text-center text-sm text-white/80 underline transition hover:text-white;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
+    .identity-gate{
+      justify-content: flex-start;
+      padding-top: 7rem;
+      padding-bottom: 7rem;
+    }
+
     .site-header{
       top: 0.85rem;
       left: 0.75rem;
       right: 0.75rem;
-      padding: 0.85rem 1rem;
+      padding: 0.75rem 0.95rem;
+      width: auto;
+      max-width: 92vw;
     }
 
     .glow-card{
       min-height: auto;
       gap: 1.25rem;
       padding: 1.5rem;
+      border-radius: 1.25rem;
+      width: min(100%, 100%);
+      margin-top: 4rem;
+      margin-bottom: 8rem;
     }
 
     .heading{
-      font-size: 2.1rem;
+      font-size: 2rem;
     }
 
     .des{
-      font-size: 0.98rem;
+      font-size: 0.95rem;
+    }
+
+    .input{
+      padding: 1rem 0.9rem;
     }
 
     .submit-btn {
@@ -362,11 +379,7 @@ body {
       bottom: 1.25rem;
       padding: 0 1rem;
       font-size: 0.85rem;
-      width: min(96vw, 38rem);
-    }
-
-    .glow-card {
-      margin-bottom: 8rem;
+      width: min(96vw, 34rem);
     }
   }
 }
