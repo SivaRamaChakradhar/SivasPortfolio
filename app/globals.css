@@ -31,33 +31,61 @@ body {
 
 @layer components{
   .identity-gate{
-    @apply relative flex flex-col min-h-screen w-full items-center justify-start overflow-y-auto bg-[#050816] text-white isolate px-4 py-8 md:justify-center;
+    @apply relative flex min-h-screen h-dvh w-full flex-col items-center justify-start overflow-x-hidden overflow-y-auto bg-[#050816] text-white isolate;
+    padding: clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 4vw, 3rem);
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
     scroll-behavior: smooth;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
     scrollbar-gutter: stable;
+    animation: fadeInUp 0.9s ease both;
   }
 
   .identity-background{
-    @apply pointer-events-none absolute top-[-100px] right-[-100px] h-[400px] w-[400px] rounded-full bg-purple-600/30 blur-[120px];
+    @apply pointer-events-none absolute rounded-full bg-purple-600/25 blur-[120px];
+    width: clamp(320px, 30vw, 420px);
+    height: clamp(320px, 30vw, 420px);
+    top: clamp(-140px, -10vw, -100px);
+    right: clamp(-140px, -10vw, -100px);
+    animation: drift 14s ease-in-out infinite alternate;
   }
 
   .purple-glow{
-    @apply pointer-events-none absolute bottom-[-100px] left-[-100px] h-[350px] w-[350px] rounded-full bg-blue-500/20 blur-[120px];
+    @apply pointer-events-none absolute rounded-full bg-blue-500/15 blur-[120px];
+    width: clamp(280px, 26vw, 360px);
+    height: clamp(280px, 26vw, 360px);
+    bottom: clamp(-140px, -10vw, -100px);
+    left: clamp(-140px, -10vw, -100px);
+    animation: drift 18s ease-in-out infinite alternate-reverse;
   }
 
   .blue-glow{
-    @apply pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-violet-500/10 rounded-full blur-[150px];
+    @apply pointer-events-none absolute rounded-full bg-violet-500/10 blur-[150px];
+    width: clamp(360px, 38vw, 520px);
+    height: clamp(360px, 38vw, 520px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: drift 16s ease-in-out infinite alternate;
   }
 
   .center-glow{
-    @apply pointer-events-none fixed inset-0 min-h-screen opacity-30 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:40px_40px];
+    @apply pointer-events-none fixed inset-0 opacity-25;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: pulseGlow 12s ease-in-out infinite;
   }
 
   .glow-card{
-    @apply relative z-10 flex w-full max-w-2xl min-h-[400px] flex-col items-center justify-center gap-8 rounded-[15px] border border-white/10 bg-white/5 p-5 shadow-2xl backdrop-blur-xl;
+    @apply relative z-10 flex w-full max-w-5xl flex-col items-center justify-center gap-6 rounded-[22px] border border-white/10 bg-white/5 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.25)] backdrop-blur-2xl transition duration-500 ease-out;
+    margin-top: 5.5rem;
+    margin-bottom: 10rem;
+    animation: fadeInUp 0.9s ease both;
+  }
+
+  .glow-card:hover {
+    transform: translateY(-3px);
   }
 
   .glow-card:hover::before {
@@ -67,43 +95,49 @@ body {
   .glow-card::before {
     content: "";
     position: absolute;
-    inset: -18px;
+    inset: -22px;
     border-radius: inherit;
     background: linear-gradient(90deg, rgba(99,102,241,0.18), rgba(168,85,247,0.14), rgba(236,72,153,0.12));
-    filter: blur(28px);
+    filter: blur(34px);
     z-index: -1;
     pointer-events: none;
-    animation: borderGlow 6s linear infinite;
+    animation: borderGlow 7s linear infinite;
   }
 
   .specialElement{
-    border: 1px solid #3B82F6;
-    font-size: 12px;
-    padding: 5px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    height: 30px;
-    width: 90px;
-    text-align: center;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-blue-400/30 px-4 py-2 text-xs font-medium tracking-[0.25em] text-white/90;
+    background: rgba(255,255,255,0.07);
+    transition: transform 0.35s ease, background-color 0.35s ease;
+    animation: floatUp 6s ease-in-out infinite;
+  }
+
+  .specialElement:hover {
+    transform: translateY(-1px) scale(1.03);
+    background: rgba(255,255,255,0.14);
   }
 
   .welcome-logo{
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
     object-fit: contain;
     display: inline-block;
+    animation: pulseGlow 3.6s ease-in-out infinite;
   }
   /* Top-left header styles */
   .site-header{
-    @apply fixed top-6 left-8 z-50 flex items-center;
+    @apply fixed top-4 left-4 z-50 flex items-center gap-3;
+    padding: 0.85rem 1rem;
+    max-width: min(92vw, 320px);
+    backdrop-filter: blur(20px);
+    background: rgba(5,8,22,0.42);
+    border-radius: 999px;
   }
 
   .gate-logo{
-    width: 74px;
-    height: 74px;
+    width: 48px;
+    height: 48px;
     object-fit: contain;
-    border-radius: 8px;
+    border-radius: 16px;
   }
 
   .site-text{
@@ -111,7 +145,7 @@ body {
   }
 
   .site-name{
-    @apply text-sm font-semibold tracking-wide;
+    @apply text-sm font-semibold tracking-[0.18em];
   }
 
   .site-role{
@@ -130,11 +164,16 @@ body {
   }
 
   .greeting{
-    @apply pl-2 font-sans;
+    @apply pl-2 font-sans text-[0.75rem] uppercase tracking-[0.3em] text-white/65;
   }
 
   .heading{
-    @apply text-3xl font-bold m-0 p-0;
+    font-size: clamp(2.2rem, 4.6vw, 3.6rem);
+    font-weight: 800;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 1.03;
   }
 
   .heading-style{
@@ -142,16 +181,20 @@ body {
   }
 
   .des{
-    @apply text-[#8B90A7] p-0 m-0 text-lg text-center;
+    @apply text-[#BAC3E0] p-0 m-0 text-center;
+    font-size: clamp(1rem, 1.1vw, 1.12rem);
+    max-width: 38rem;
+    line-height: 1.7;
   }
 
   .label{
-    @apply w-full text-left text-sm;
+    @apply w-full text-left text-sm text-white/70;
   }
 
   .input{
-    @apply w-full mt-4 mb-4 p-3 rounded-md border border-white/20 bg-transparent text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500;
-    background-color: rgba(255, 255, 255, 0.05);
+    @apply w-full mt-4 mb-4 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-white/45 transition duration-200 ease-in-out;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.06);
     -webkit-appearance: none;
     appearance: none;
     color-scheme: dark;
@@ -165,33 +208,47 @@ body {
     transition: background-color 5000s ease-in-out 0s;
   }
 
+  .input:focus {
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.14);
+    border-color: rgba(59,130,246,0.55);
+  }
+
   .submit-btn{
-    width: 100%;
-    background: linear-gradient(
-      90deg,
-      #3350DF 0%,
-      #7C3AED 50%,
-      #D946EF 100%
-    );
-    border-radius: 10px;
+    @apply inline-flex items-center justify-center gap-2 w-full rounded-2xl text-sm font-semibold text-white;
+    background: linear-gradient(90deg, #3350DF 0%, #7C3AED 50%, #D946EF 100%);
+    border: none;
+    padding: 1rem 1rem;
+    box-shadow: 0 18px 40px rgba(80, 45, 210, 0.18);
+    transition: transform 0.24s ease, box-shadow 0.24s ease, opacity 0.24s ease;
     text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    gap: 10px;
-    margin-top: 10px;
-    cursor: pointer;
-    outline: none;
+  }
+
+  .submit-btn:hover,
+  .submit-btn:focus-visible{
+    transform: translateY(-2px);
+    box-shadow: 0 24px 50px rgba(124, 58, 237, 0.24);
+    opacity: 0.98;
+  }
+
+  .submit-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+
+  .submit-btn:hover svg {
+    transform: translateX(5px);
   }
 
   .loading-card {
     min-height: 320px;
     text-align: center;
+    animation: fadeInUp 0.9s ease both;
   }
 
   .error-message {
-    @apply w-full p-3 mt-3 mb-4 text-red-400 rounded-md bg-red-500/15 border border-red-500/30 text-sm;
+    @apply w-full p-3 mt-3 mb-4 text-red-400 rounded-2xl bg-red-500/15 border border-red-500/30 text-sm;
   }
 
   .loading-orbit {
@@ -259,12 +316,8 @@ body {
     @apply block text-xs uppercase tracking-[0.3em] text-white/45;
   }
 
-  .hero-stat-value {
-    @apply mt-3 block text-2xl font-semibold;
-  }
-
   .skip-container{
-    @apply mt-6 flex flex-col gap-4;
+    @apply mt-6 flex w-full flex-col gap-4;
   }
 
   .skip-text{
@@ -272,18 +325,101 @@ body {
   }
 
   .hr-line{
-    @apply w-25;
+    @apply h-px flex-1 bg-white/10;
   }
 
   .skip-button{
-    @apply w-full text-center text-sm text-white/50 underline;
+    @apply w-full text-center text-sm text-white/80 underline transition hover:text-white;
+  }
+
+  @media (max-width: 640px) {
+    .site-header{
+      top: 0.85rem;
+      left: 0.75rem;
+      right: 0.75rem;
+      padding: 0.85rem 1rem;
+    }
+
+    .glow-card{
+      min-height: auto;
+      gap: 1.25rem;
+      padding: 1.5rem;
+    }
+
+    .heading{
+      font-size: 2.1rem;
+    }
+
+    .des{
+      font-size: 0.98rem;
+    }
+
+    .submit-btn {
+      padding: 0.95rem 1rem;
+    }
+
+    .quote{
+      bottom: 1.25rem;
+      padding: 0 1rem;
+      font-size: 0.85rem;
+      width: min(96vw, 38rem);
+    }
+
+    .glow-card {
+      margin-bottom: 8rem;
+    }
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+@keyframes drift {
+  from {
+    transform: translate(0, 0) rotate(0.01deg);
+  }
+  to {
+    transform: translate(12px, -12px) rotate(1.5deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.28;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.38;
+    transform: scale(1.01);
+  }
+}
+
+@keyframes floatUp {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
-
-
