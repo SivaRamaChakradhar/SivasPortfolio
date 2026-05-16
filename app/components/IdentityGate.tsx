@@ -89,7 +89,7 @@ const IdentityGate = () => {
   }
 
   if (view === "hero" || isHeroLocked) {
-    return <HeroSection />;
+    return null;
   }
 
   if (view === "loading") {

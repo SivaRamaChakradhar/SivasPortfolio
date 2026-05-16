@@ -19,9 +19,10 @@ html,
 body {
   min-height: 100%;
   width: 100%;
-  overflow: hidden;
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -103,6 +104,74 @@ body {
     z-index: -1;
     pointer-events: none;
     animation: borderGlow 7s linear infinite;
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    color: inherit;
+    text-decoration: none;
+    padding-bottom: 6px;
+    transition: color 160ms cubic-bezier(.2,.9,.2,1), transform 160ms cubic-bezier(.2,.9,.2,1);
+    transform-origin: center center;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .nav-link::before,
+  .nav-link::after {
+    position: absolute;
+    bottom: 0;
+    width: 8px;
+    height: 8px;
+    color: #a855f7;
+    border-radius: 9999px;
+    background: transparent;
+    transition: background-color 160ms cubic-bezier(.2,.9,.2,1), transform 160ms cubic-bezier(.2,.9,.2,1);
+  }
+
+  .nav-link::before {
+    left: 0;
+    transform: translateX(-50%);
+  }
+
+  .nav-link::after {
+    right: 0;
+    transform: translateX(50%);
+    color: #a855f7;
+  }
+
+  .nav-link:hover {
+    background-image: linear-gradient(rgba(168,85,247,0.95), rgba(168,85,247,0.95));
+    background-repeat: no-repeat;
+    background-position: center 100%;
+    background-size: calc(100% - 20px) 3px;
+  }
+
+  .nav-link:hover::before,
+  .nav-link:hover::after {
+    background: #a855f7;
+  }
+
+  /* Apply same underline/dot effect when parent li (.nav-item) is hovered */
+  .nav-item:hover .nav-link {
+    background-repeat: no-repeat;
+    background-position: center 100%;
+    background-size: calc(100% - 20px) 3px;
+    color: #a855f7 !important;
+    -webkit-text-fill-color: #a855f7 !important;
+    transition: color 160ms cubic-bezier(.2,.9,.2,1), transform 160ms cubic-bezier(.2,.9,.2,1);
+    transform: translateY(-2px) scale(1.08);
+    font-weight: 700;
+  }
+
+  .nav-item:hover .nav-link::before,
+  .nav-item:hover .nav-link::after {
+    background: #a855f7;
+  }
+
+  .nav-item:hover, .nav-button:after{
+    transform: translateY(-2px) scale(1.08);
+    font-weight: 700;
   }
 
   .specialElement{
@@ -440,5 +509,16 @@ body {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
