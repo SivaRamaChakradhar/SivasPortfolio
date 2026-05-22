@@ -1,7 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { motion, type Variants } from "framer-motion";
+import {
+  motion,
+  type Variants,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Navbar from "./Navbar";
 
 type SpecializedItem = {
@@ -27,176 +32,81 @@ const containerVariants: Variants = {
 };
 
 const fadeUp: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 28,
-  },
+  hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.75,
-      ease: "easeOut",
-    },
+    transition: { duration: 0.75, ease: "easeOut" },
   },
 };
 
 const fadeLeft: Variants = {
-  hidden: {
-    opacity: 0,
-    x: 45,
-    scale: 0.96,
-  },
+  hidden: { opacity: 0, x: 45, scale: 0.96 },
   visible: {
     opacity: 1,
     x: 0,
     scale: 1,
-    transition: {
-      duration: 0.9,
-      ease: "easeOut",
-    },
+    transition: { duration: 0.9, ease: "easeOut" },
   },
 };
 
 const cardVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 24,
-    scale: 0.94,
-  },
+  hidden: { opacity: 0, y: 24, scale: 0.94 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: {
-      duration: 0.55,
-      ease: "easeOut",
-    },
+    transition: { duration: 0.55, ease: "easeOut" },
   },
 };
 
 const HeroSection = () => {
+  const { scrollY } = useScroll();
+
+  const textY = useTransform(scrollY, [0, 500], [0, 70]);
+  const imageY = useTransform(scrollY, [0, 500], [0, -90]);
+  const cardsY = useTransform(scrollY, [0, 500], [0, -35]);
+  const cardsOpacity = useTransform(scrollY, [0, 450], [1, 0.35]);
+
+  const glowOneY = useTransform(scrollY, [0, 600], [0, 120]);
+  const glowTwoY = useTransform(scrollY, [0, 600], [0, -100]);
+
   return (
     <section
       id="Home"
-      className="relative min-h-screen w-full overflow-hidden bg-[#030014] text-white"
+      className="relative flex min-h-screen w-full flex-col overflow-hidden text-white"
     >
       <Navbar />
 
-      {/* Background particles */}
+      {/* Parallax glow effects */}
       <motion.div
-        className="absolute inset-0 opacity-25 bg-[radial-gradient(rgba(255,255,255,0.3)_1px,transparent_1px)] bg-[length:32px_32px] pointer-events-none"
-        animate={{
-          backgroundPosition: ["0px 0px", "32px 32px"],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "linear",
-        }}
+        style={{ y: glowOneY }}
+        className="pointer-events-none absolute left-[-120px] top-24 h-72 w-72 rounded-full bg-purple-600/20 blur-[100px]"
       />
-
-      {/* Glow blobs */}
       <motion.div
-        className="absolute top-[15%] right-[10%] h-[500px] w-[500px] rounded-full bg-purple-600/15 blur-[140px]"
-        animate={{
-          scale: [1, 1.12, 1],
-          opacity: [0.45, 0.75, 0.45],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+        style={{ y: glowTwoY }}
+        className="pointer-events-none absolute right-[-120px] top-40 h-80 w-80 rounded-full bg-cyan-500/15 blur-[110px]"
       />
-
-      <motion.div
-        className="absolute bottom-[-10%] left-[40%] h-[450px] w-[550px] rounded-full bg-cyan-500/10 blur-[130px]"
-        animate={{
-          x: [0, 35, 0],
-          y: [0, -20, 0],
-          opacity: [0.35, 0.65, 0.35],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      <motion.div
-        className="absolute top-[30%] -left-20 h-[350px] w-[350px] rounded-full bg-blue-700/10 blur-[120px]"
-        animate={{
-          x: [0, 25, 0],
-          scale: [1, 1.08, 1],
-        }}
-        transition={{
-          duration: 9,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      {/* Tiny glowing stars */}
-      <motion.div
-        className="absolute left-[49%] top-[9%] h-1.5 w-1.5 rounded-full bg-purple-400 shadow-[0_0_15px_4px_rgba(168,85,247,0.7)]"
-        animate={{ opacity: [0.25, 1, 0.25], scale: [1, 1.5, 1] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      <motion.div
-        className="absolute right-[34%] top-[28%] h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_20px_5px_rgba(34,211,238,0.8)]"
-        animate={{ opacity: [0.25, 1, 0.25], scale: [1, 1.4, 1] }}
-        transition={{
-          duration: 2.8,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-      />
-
-      <motion.div
-        className="absolute right-[5%] top-[33%] h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_15px_3px_rgba(34,211,238,0.6)]"
-        animate={{ opacity: [0.25, 1, 0.25], scale: [1, 1.35, 1] }}
-        transition={{
-          duration: 2.4,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.5,
-        }}
-      />
-
-      <motion.div
-        className="absolute left-[51%] bottom-[48%] h-1 w-1 rounded-full bg-purple-300 shadow-[0_0_12px_3px_rgba(192,132,252,0.8)]"
-        animate={{ opacity: [0.25, 1, 0.25], scale: [1, 1.6, 1] }}
-        transition={{
-          duration: 2.6,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1.5,
-        }}
-      />
-
-      <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#030014] via-[#030014]/60 to-transparent pointer-events-none" />
 
       {/* Hero content */}
       <motion.div
-        className="relative z-10 mx-auto flex w-full max-w-7xl flex-col-reverse items-center gap-8 px-6 py-20 lg:flex-row lg:items-center"
+        className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col-reverse items-center justify-start gap-6 px-6 pt-20 pb-6 sm:pt-24 md:pt-28 lg:flex-row lg:items-center lg:justify-center lg:gap-8"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <motion.div
-          className="w-full lg:w-7/12 space-y-4 lg:space-y-6"
+          style={{ y: textY }}
+          className="w-full space-y-4 text-center lg:w-7/12 lg:space-y-6 lg:text-left"
           variants={containerVariants}
         >
           <motion.h1
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight"
+            className="text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl lg:text-6xl"
             variants={fadeUp}
           >
             Hey, I&apos;m
             <motion.span
-              className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-400"
+              className="block bg-gradient-to-r from-purple-500 to-cyan-400 bg-clip-text text-transparent"
               variants={fadeUp}
             >
               Siva Rama Chakradhar Ramisetti
@@ -204,14 +114,14 @@ const HeroSection = () => {
           </motion.h1>
 
           <motion.p
-            className="text-lg md:text-xl text-cyan-400 font-semibold"
+            className="text-lg font-semibold text-cyan-400 md:text-xl"
             variants={fadeUp}
           >
             Full Stack Developer
           </motion.p>
 
           <motion.p
-            className="text-base md:text-lg text-gray-400 max-w-xl"
+            className="mx-auto max-w-xl text-base text-gray-400 md:text-lg lg:mx-0"
             variants={fadeUp}
           >
             I build intelligent, scalable and modern web applications with
@@ -220,7 +130,8 @@ const HeroSection = () => {
         </motion.div>
 
         <motion.div
-          className="w-full lg:w-5/12 flex justify-center items-center"
+          style={{ y: imageY }}
+          className="flex w-full items-center justify-center lg:w-5/12"
           variants={fadeLeft}
         >
           <motion.div
@@ -233,7 +144,7 @@ const HeroSection = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="w-full max-w-[520px]"
+            className="w-full max-w-[340px] sm:max-w-[420px] lg:max-w-[520px]"
           >
             <Image
               src="/HomeImage.png"
@@ -241,7 +152,7 @@ const HeroSection = () => {
               width={520}
               height={520}
               priority
-              className="h-auto w-full object-contain rounded-xl"
+              className="h-auto w-full rounded-xl object-contain"
             />
           </motion.div>
         </motion.div>
@@ -249,7 +160,8 @@ const HeroSection = () => {
 
       {/* Specialization cards */}
       <motion.div
-        className="relative z-10 flex flex-wrap gap-6 justify-center mt-10 w-full pb-28 px-6"
+        style={{ y: cardsY, opacity: cardsOpacity }}
+        className="relative z-10 flex w-full flex-wrap justify-center gap-4 px-6 pb-16 md:gap-6 md:pb-28"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -264,7 +176,7 @@ const HeroSection = () => {
               boxShadow: "0 0 28px rgba(168,85,247,0.65)",
             }}
             whileTap={{ scale: 0.96 }}
-            className="px-5 py-4 rounded-xl border border-gray-600 bg-white/[0.03] backdrop-blur-sm shadow-[0_0_15px_0_rgba(168,85,247,0.5)] text-sm text-gray-400 hover:border-purple-400 hover:text-purple-400 transition cursor-pointer"
+            className="cursor-pointer rounded-xl border border-gray-600 bg-white/[0.03] px-4 py-3 text-center text-xs text-gray-400 shadow-[0_0_15px_0_rgba(168,85,247,0.5)] backdrop-blur-sm transition hover:border-purple-400 hover:text-purple-400 sm:px-5 sm:py-4 sm:text-sm"
           >
             {item.label}
           </motion.div>
@@ -273,7 +185,7 @@ const HeroSection = () => {
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 transform flex items-center gap-3 text-gray-400"
+        className="pointer-events-none absolute bottom-8 left-1/2 z-20 hidden -translate-x-1/2 items-center gap-3 text-gray-400 md:flex"
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.3, duration: 0.7, ease: "easeOut" }}
@@ -303,7 +215,7 @@ const HeroSection = () => {
               cy="7"
               r="1"
               className="fill-current text-gray-400"
-              animate={{ cy: [7, 14, 7], opacity: [1, 0.35, 1] }}
+              animate={{ y: [0, 7, 0], opacity: [1, 0.35, 1] }}
               transition={{
                 duration: 1.8,
                 repeat: Infinity,
@@ -313,7 +225,7 @@ const HeroSection = () => {
           </svg>
         </motion.span>
 
-        <span className="text-xl md:text-lg">Scroll to explore</span>
+        <span className="text-lg md:text-xl">Scroll to explore</span>
       </motion.div>
     </section>
   );

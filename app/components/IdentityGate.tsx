@@ -1,62 +1,84 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import HeroSection from "./HeroSection";
+import Image from "next/image";
+import { useEffect, useState, type ReactNode, type FormEvent } from "react";
 
-const IdentityGate = () => {
-  const [name, setName] = useState("");
-  const [role, setRole] = useState("");
-  const [view, setView] = useState<"gate" | "loading" | "hero">("gate");
-  const [isHeroLocked, setIsHeroLocked] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false);
-  const [error, setError] = useState("");
+type IdentityGateProps = {
+  children: ReactNode;
+};
+
+type View = "gate" | "loading";
+
+const LOADING_MS = 2200;
+const STORAGE_KEY = "portfolio-view";
+const VISITOR_NAME_KEY = "visitor-name";
+const VISITOR_ROLE_KEY = "visitor-role";
+
+function SiteHeader() {
+  return (
+    <header className="site-header">
+      <Image
+        src="/gate_logo.png"
+        alt="Siva Rama Chakradhar logo"
+        width={48}
+        height={48}
+        className="gate-logo"
+        priority
+      />
+
+      <div className="site-text">
+        <div className="site-name">Siva Rama Chakradhar</div>
+        <div className="site-role">Developer</div>
+      </div>
+    </header>
+  );
+}
+
+const IdentityGate = ({ children }: IdentityGateProps) => {
+  const [name, setName] = useState<string>("");
+  const [role, setRole] = useState<string>("");
+  const [view, setView] = useState<View>("gate");
+  const [isHydrated, setIsHydrated] = useState<boolean>(false);
+  const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    const savedView = localStorage.getItem("portfolio-view");
-    if (savedView === "hero") {
-      setView("hero");
-      setIsHeroLocked(true);
+    if (localStorage.getItem(STORAGE_KEY) === "hero") {
+      setIsUnlocked(true);
     }
+
     setIsHydrated(true);
   }, []);
 
   useEffect(() => {
-    if (view !== "loading") {
-      return;
-    }
+    if (view !== "loading") return;
 
     const timer = window.setTimeout(() => {
-      setView("hero");
-      localStorage.setItem("portfolio-view", "hero");
-      setIsHeroLocked(true);
-    }, 2500);
+      localStorage.setItem(STORAGE_KEY, "hero");
+      setIsUnlocked(true);
+    }, LOADING_MS);
 
     return () => window.clearTimeout(timer);
   }, [view]);
 
-  useEffect(() => {
-    if (isHeroLocked) {
-      const handlePopState = () => {
-        setView("hero");
-        window.history.pushState(null, "", window.location.href);
-      };
+  const startLoading = () => {
+    setView("loading");
+  };
 
-      window.addEventListener("popstate", handlePopState);
-      return () => {
-        window.removeEventListener("popstate", handlePopState);
-      };
-    }
-  }, [isHeroLocked]);
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    if (!name.trim()) {
+    const trimmedName = name.trim();
+
+    if (!trimmedName) {
       setError("Please enter your name to continue");
       return;
     }
 
     setError("");
+
+    localStorage.setItem(VISITOR_NAME_KEY, trimmedName);
+    localStorage.setItem(VISITOR_ROLE_KEY, role.trim());
 
     try {
       const response = await fetch("/api/visitor", {
@@ -65,54 +87,69 @@ const IdentityGate = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: name.trim(),
-          role: role.trim(),
+          name: trimmedName,
+          role: role.trim() || "Visitor",
         }),
       });
 
-      const data = await response.json();
+      const data: { success?: boolean; error?: string } = await response.json();
 
-      if (!data.success) {
-        setError("Failed to save your information. Please try again.");
+      if (!response.ok || !data.success) {
+        setError(
+          typeof data.error === "string"
+            ? data.error
+            : "Failed to save your information. Please try again."
+        );
         return;
       }
 
-      setView("loading");
-    } catch (error) {
-      console.error("Error submitting form:", error);
+      startLoading();
+    } catch (err) {
+      console.error("Error submitting form:", err);
       setError("An error occurred. Please try again.");
     }
-  }
+  };
 
   if (!isHydrated) {
-    return null;
+    return (
+      <section className="relative z-10 min-h-screen" aria-hidden="true" />
+    );
   }
 
-  if (view === "hero" || isHeroLocked) {
-    return null;
+  if (isUnlocked) {
+    return <>{children}</>;
   }
 
   if (view === "loading") {
-    return (
-      <main className="identity-gate">
-        <div className="identity-background" />
-        <div className="purple-glow" />
-        <div className="blue-glow" />
-        <div className="center-glow" />
+    const displayName = name.trim() || "there";
 
-        <section className="glow-card loading-card" aria-live="polite" aria-busy="true">
+    return (
+      <section className="identity-gate identity-gate-overlay relative z-10">
+        <SiteHeader />
+
+        <div
+          className="glow-card loading-card"
+          aria-live="polite"
+          aria-busy="true"
+        >
           <span className="specialElement">
             <p className="greeting">welcome</p>
-            <img
+
+            <Image
               src="/welcome_logo.png"
-              alt="welcome_logo"
+              alt=""
+              width={32}
+              height={32}
               className="welcome-logo"
+              aria-hidden="true"
             />
           </span>
 
-          <h1 className="heading">Hello {name.trim() || "there"}.</h1>
+          <h1 className="heading">Hello {displayName}.</h1>
+
           <p className="des">
-            Glad you are here. Taking you to the portfolio experience in a moment.
+            Glad you are here. Taking you to the portfolio experience in a
+            moment.
           </p>
 
           <div className="loading-orbit" aria-hidden="true">
@@ -120,69 +157,90 @@ const IdentityGate = () => {
             <span />
             <span />
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
     );
   }
 
   return (
-    <main className="identity-gate">
-        <div className="site-header">
-            <img
-            src="/gate_logo.png"
-            alt="gate_logo"
-            className="gate-logo"
-            />
-            <div className="site-text">
-            <div className="site-name">Siva Rama Chakradhar</div>
-            <div className="site-role">Developer</div>
+    <section className="identity-gate identity-gate-overlay relative z-10">
+      <SiteHeader />
+
+      <div className="glow-card">
+        <span className="specialElement">
+          <p className="greeting">welcome</p>
+
+          <Image
+            src="/welcome_logo.png"
+            alt=""
+            width={32}
+            height={32}
+            className="welcome-logo"
+            aria-hidden="true"
+          />
+        </span>
+
+        <h1 className="heading">
+          Nice to <span className="heading-style">meet</span> you!
+        </h1>
+
+        <p className="des">
+          Before you explore my portfolio, I&apos;d love to know{" "}
+          <span className="heading-style">who&apos;s visiting.</span>
+        </p>
+
+        <form className="gate-form" onSubmit={handleSubmit} noValidate>
+          <label className="label" htmlFor="name">
+            What should I call you?
+          </label>
+
+          <input
+            value={name}
+            onChange={(event) => {
+              setName(event.target.value);
+              setError("");
+            }}
+            className="input"
+            id="name"
+            type="text"
+            name="name"
+            autoComplete="name"
+            placeholder="Enter your name"
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? "gate-error" : undefined}
+            required
+          />
+
+          <label className="label" htmlFor="role">
+            Who are you? <span className="label-optional">(optional)</span>
+          </label>
+
+          <input
+            value={role}
+            onChange={(event) => setRole(event.target.value)}
+            className="input"
+            id="role"
+            type="text"
+            name="role"
+            placeholder="e.g. Developer, Recruiter, Student"
+          />
+
+          <button
+            type="submit"
+            className="submit-btn"
+            aria-label="Submit visitor information and open portfolio"
+          >
+            <span>Let&apos;s Get Started</span>
+          </button>
+
+          {error ? (
+            <div id="gate-error" className="error-message" role="alert">
+              {error}
             </div>
-        </div>
-
-        <div className="identity-background" />
-
-        <div className="purple-glow" />
-
-        <div className="blue-glow" />
-
-        <div className="center-glow" />
-
-        <div className="glow-card">
-            <span className="specialElement">
-            <p className="greeting">welcome</p>
-            <img
-                src="/welcome_logo.png"
-                alt="welcome_logo"
-                className="welcome-logo"
-            />
-            </span>
-
-            <h1 className="heading">Nice to <span className="heading-style">meet</span> you!</h1>
-            <p className="des">Before you explore my portfolio, I'd love to know <span className="heading-style">who's visiting.</span></p>
-
-            <form onSubmit={handleSubmit}>
-            <label className="label" htmlFor="name">What Should I call you?</label>
-            <input value={name} onChange={e => {setName(e.target.value); setError("");}} className="input" id="name" type="text" placeholder="Enter your name" />
-            <label className="label" htmlFor="role">Who are you?</label>
-            <input value={role} onChange={e => {setRole(e.target.value)}} className="input" id="role" type="text" placeholder="Enter your role (e.g., Developer, Student)" />
-
-                <button type="submit" className="submit-btn" aria-label="Submit visitor information and open portfolio">
-                    <span>Let's Get Started</span>
-                </button>
-
-                {error && <div className="error-message">{error}</div>}
-
-                <div className="skip-container">
-                    <div className="skip-text">
-                        <hr className="hr-line" />
-                        <p>or</p>
-                        <hr className="hr-line" />
-                    </div>
-                    <button onClick={() => setView("loading")} type="button" className="skip-button">Skip for now</button>
-                </div>
-            </form>
-        </div>
-    </main>
+          ) : null}
+        </form>
+      </div>
+    </section>
   );
 };
 

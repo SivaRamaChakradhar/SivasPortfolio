@@ -20,16 +20,14 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
+    console.error("Error logging visitor:", err);
 
     return NextResponse.json(
       {
         success: false,
-        error: message,
+        error: "Unable to save your visit right now. Please try again.",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
