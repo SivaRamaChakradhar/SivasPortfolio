@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Code2, ExternalLink, Star, Trophy } from "lucide-react"
 
 import { FaGithub } from 'react-icons/fa'
+import { usePrefersHover } from '@/lib/usePrefersHover'
 
 const codingProfiles = [
   {
@@ -39,6 +40,8 @@ const githubStats = [
 const heatmap = Array.from({ length: 84 }, (_, i) => i % 7)
 
 const CodingArena = () => {
+  const prefersHover = usePrefersHover()
+
   return (
     <section
       id="Coding"
@@ -79,8 +82,8 @@ const CodingArena = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.12, duration: 0.55 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-lg shadow-black/20 backdrop-blur-xl transition hover:border-purple-400/50"
+              whileHover={prefersHover ? { y: -8, scale: 1.02 } : undefined}
+              className="group touch-manipulation rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-lg shadow-black/20 backdrop-blur-xl transition hover:border-purple-400/50"
             >
               <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -131,11 +134,11 @@ const CodingArena = () => {
                 </div>
             </div>
 
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/30 p-4">
+            <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/30 p-4 touch-pan-x">
                 <img
                 src="https://ghchart.rshah.org/00ff99/SivaRamaChakradhar"
                 alt="GitHub contribution heatmap"
-                className="w-full min-w-[700px]"
+                className="h-auto w-full min-w-[520px] max-w-none"
                 />
             </div>
         </motion.div>

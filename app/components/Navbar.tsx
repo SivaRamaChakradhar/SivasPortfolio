@@ -29,7 +29,7 @@ const Navbar = () => {
 
   return (
     <header className="fixed left-0 top-0 z-50 w-full">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+      <nav className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         {/* Logo */}
         <button
           type="button"
@@ -75,7 +75,7 @@ const Navbar = () => {
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="relative z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.05] text-white backdrop-blur-md transition hover:border-purple-400 hover:text-purple-300 lg:hidden"
+          className="relative z-50 inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-white/15 bg-white/[0.05] text-white backdrop-blur-md transition hover:border-purple-400 hover:text-purple-300 lg:hidden"
           aria-label="Toggle navigation menu"
           aria-expanded={isOpen}
         >
@@ -85,10 +85,10 @@ const Navbar = () => {
 
       {/* Mobile/Tablet Dropdown */}
       <div
-        className={`lg:hidden ${
+        className={`absolute left-0 right-0 top-full lg:hidden ${
           isOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0"
+            ? "pointer-events-auto visible opacity-100"
+            : "pointer-events-none invisible opacity-0"
         } transition duration-300`}
       >
         <div className="mx-4 rounded-3xl border border-white/10 bg-[#050816]/85 p-5 shadow-[0_20px_70px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
@@ -98,7 +98,7 @@ const Navbar = () => {
                 key={link.id}
                 type="button"
                 onClick={() => handleScroll(link.id)}
-                className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-sm font-semibold uppercase tracking-[0.2em] text-white/75 transition hover:border-purple-400 hover:text-purple-300"
+                className="min-h-11 w-full touch-manipulation rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-sm font-semibold uppercase tracking-[0.2em] text-white/75 transition hover:border-purple-400 hover:text-purple-300"
               >
                 {link.label}
               </button>
@@ -108,7 +108,7 @@ const Navbar = () => {
               href="https://drive.google.com/file/d/1pcLYX5hL47slr36h70oRonAMzpN1jCyF/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 rounded-2xl border border-purple-400/40 bg-purple-500/10 px-4 py-3 text-center text-sm font-semibold uppercase tracking-[0.2em] text-purple-300 transition hover:bg-purple-500/20"
+              className="mt-2 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-2xl border border-purple-400/40 bg-purple-500/10 px-4 py-3 text-center text-sm font-semibold uppercase tracking-[0.2em] text-purple-300 transition hover:bg-purple-500/20"
               onClick={() => setIsOpen(false)}
             >
               View Resume

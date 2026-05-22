@@ -75,6 +75,7 @@ main {
 
 section {
   background: transparent !important;
+  scroll-margin-top: 5.5rem;
 }
 
 @layer components {
@@ -276,7 +277,7 @@ section {
   }
 
   .input {
-    @apply mt-4 mb-4 w-full rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-white/45 transition duration-200 ease-in-out;
+    @apply mt-4 mb-4 min-h-11 w-full touch-manipulation rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-white/45 transition duration-200 ease-in-out;
     outline: none;
     background-color: rgba(255, 255, 255, 0.06);
     -webkit-appearance: none;
@@ -298,7 +299,7 @@ section {
   }
 
   .submit-btn {
-    @apply inline-flex w-full items-center justify-center gap-2 rounded-2xl text-sm font-semibold text-white;
+    @apply inline-flex min-h-11 w-full touch-manipulation items-center justify-center gap-2 rounded-2xl text-sm font-semibold text-white;
     background: linear-gradient(90deg, #3350df 0%, #7c3aed 50%, #d946ef 100%);
     border: none;
     padding: 1rem;

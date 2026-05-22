@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { CiStar } from "react-icons/ci";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import { usePrefersHover } from "@/lib/usePrefersHover";
 
 const Feedback = () => {
+  const prefersHover = usePrefersHover();
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [feedback, setFeedback] = useState("");
@@ -68,8 +70,8 @@ const Feedback = () => {
       id="Feedback"
       className="relative overflow-hidden px-6 py-24 text-white"
     >
-      <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-purple-500/20 blur-3xl" />
-      <div className="absolute bottom-10 right-10 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
+      <div className="pointer-events-none absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-purple-500/20 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-10 right-10 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
 
       <div className="relative mx-auto flex max-w-4xl justify-center text-center">
         <div className="w-full rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-md md:p-12">
@@ -99,9 +101,13 @@ const Feedback = () => {
                     setSubmitted(false);
                     setError("");
                   }}
-                  onMouseEnter={() => setHoverRating(star)}
-                  onMouseLeave={() => setHoverRating(0)}
-                  className="transition duration-300 hover:scale-125"
+                  onMouseEnter={
+                    prefersHover ? () => setHoverRating(star) : undefined
+                  }
+                  onMouseLeave={
+                    prefersHover ? () => setHoverRating(0) : undefined
+                  }
+                  className="inline-flex min-h-11 min-w-11 touch-manipulation items-center justify-center rounded-lg transition duration-300 active:scale-110 md:hover:scale-110"
                   aria-label={`Rate ${star} star`}
                 >
                   <CiStar
@@ -137,7 +143,7 @@ const Feedback = () => {
             type="button"
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="mt-6 rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition duration-300 hover:scale-105 hover:bg-purple-200 disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-6 min-h-11 touch-manipulation rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition duration-300 active:scale-105 hover:bg-purple-200 disabled:cursor-not-allowed disabled:opacity-60 md:hover:scale-105"
           >
             {isSubmitting ? "Submitting..." : "Submit Feedback"}
           </button>
@@ -158,7 +164,7 @@ const Feedback = () => {
             <div className="flex flex-wrap justify-center gap-4">
               <a
                 href="mailto:sivaramisetti700@gmail.com"
-                className="flex items-center gap-2 rounded-full border border-white/10 px-5 py-2 text-sm text-gray-300 transition hover:border-purple-400 hover:text-white"
+                className="inline-flex min-h-11 touch-manipulation items-center gap-2 rounded-full border border-white/10 px-5 py-2.5 text-sm text-gray-300 transition hover:border-purple-400 hover:text-white"
               >
                 <FaEnvelope /> Email
               </a>
@@ -167,7 +173,7 @@ const Feedback = () => {
                 href="https://github.com/SivaRamaChakradhar"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-full border border-white/10 px-5 py-2 text-sm text-gray-300 transition hover:border-purple-400 hover:text-white"
+                className="inline-flex min-h-11 touch-manipulation items-center gap-2 rounded-full border border-white/10 px-5 py-2.5 text-sm text-gray-300 transition hover:border-purple-400 hover:text-white"
               >
                 <FaGithub /> GitHub
               </a>
@@ -176,7 +182,7 @@ const Feedback = () => {
                 href="https://www.linkedin.com/in/sivaramachakradhar-ramisetti/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-full border border-white/10 px-5 py-2 text-sm text-gray-300 transition hover:border-purple-400 hover:text-white"
+                className="inline-flex min-h-11 touch-manipulation items-center gap-2 rounded-full border border-white/10 px-5 py-2.5 text-sm text-gray-300 transition hover:border-purple-400 hover:text-white"
               >
                 <FaLinkedin /> LinkedIn
               </a>

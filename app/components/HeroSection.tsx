@@ -8,6 +8,7 @@ import {
   useTransform,
 } from "framer-motion";
 import Navbar from "./Navbar";
+import { usePrefersHover } from "@/lib/usePrefersHover";
 
 type SpecializedItem = {
   id: string;
@@ -61,6 +62,7 @@ const cardVariants: Variants = {
 };
 
 const HeroSection = () => {
+  const prefersHover = usePrefersHover();
   const { scrollY } = useScroll();
 
   const textY = useTransform(scrollY, [0, 500], [0, 70]);
@@ -170,13 +172,16 @@ const HeroSection = () => {
           <motion.div
             key={item.id}
             variants={cardVariants}
-            whileHover={{
-              y: -8,
-              scale: 1.04,
-              boxShadow: "0 0 28px rgba(168,85,247,0.65)",
-            }}
-            whileTap={{ scale: 0.96 }}
-            className="cursor-pointer rounded-xl border border-gray-600 bg-white/[0.03] px-4 py-3 text-center text-xs text-gray-400 shadow-[0_0_15px_0_rgba(168,85,247,0.5)] backdrop-blur-sm transition hover:border-purple-400 hover:text-purple-400 sm:px-5 sm:py-4 sm:text-sm"
+            whileHover={
+              prefersHover
+                ? {
+                    y: -8,
+                    scale: 1.04,
+                    boxShadow: "0 0 28px rgba(168,85,247,0.65)",
+                  }
+                : undefined
+            }
+            className="rounded-xl border border-gray-600 bg-white/[0.03] px-4 py-3 text-center text-xs text-gray-400 shadow-[0_0_15px_0_rgba(168,85,247,0.5)] backdrop-blur-sm sm:px-5 sm:py-4 sm:text-sm"
           >
             {item.label}
           </motion.div>

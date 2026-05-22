@@ -6,6 +6,7 @@ import { FaGithub } from 'react-icons/fa'
 
 
 import { motion } from 'framer-motion'
+import { usePrefersHover } from '@/lib/usePrefersHover'
 
 const tabItems = [
   { tabId: 'ALL', label: 'All' },
@@ -138,6 +139,7 @@ const cardVariant = {
 }
 
 const ProjectSection = () => {
+  const prefersHover = usePrefersHover()
   const [activeTab, setActiveTab] = useState('ALL')
   const [showAll, setShowAll] = useState(false)
 
@@ -180,17 +182,17 @@ const ProjectSection = () => {
           <motion.ul
             variants={fadeUp}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="relative z-40 flex flex-wrap gap-3 pointer-events-auto"
+            className="relative z-40 flex flex-wrap gap-3"
           >
             {tabItems.map(tab => (
-              <li key={tab.tabId} className="relative z-40">
+              <li key={tab.tabId}>
                 <button
                   type="button"
                   onClick={() => {
                     setActiveTab(tab.tabId)
                     setShowAll(false)
                   }}
-                  className={`relative z-50 rounded-xl border px-5 py-2 text-sm font-medium transition-all duration-300 ${
+                  className={`min-h-11 touch-manipulation rounded-xl border px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
                     activeTab === tab.tabId
                       ? 'border-purple-400 bg-purple-600 text-white shadow-[0_0_25px_rgba(168,85,247,0.45)]'
                       : 'border-white/10 bg-white/5 text-gray-300 hover:border-purple-400/60 hover:text-white'
@@ -216,7 +218,9 @@ const ProjectSection = () => {
               key={project.id}
               variants={cardVariant}
               transition={{ duration: 0.55, ease: 'easeOut' }}
-              whileHover={{ y: -8, scale: 1.02 }}
+              whileHover={
+                prefersHover ? { y: -8, scale: 1.02 } : undefined
+              }
               className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg backdrop-blur-md transition-colors duration-300 hover:border-purple-400/70 hover:shadow-[0_0_35px_rgba(168,85,247,0.25)]"
             >
               <div className="h-44 overflow-hidden">
@@ -243,14 +247,15 @@ const ProjectSection = () => {
                   ))}
                 </div>
 
-                <div className="mt-6 flex gap-4">
+                <div className="mt-6 flex gap-3">
                   <a
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${project.title} GitHub`}
+                    className="inline-flex min-h-11 min-w-11 touch-manipulation items-center justify-center rounded-xl border border-white/10 text-gray-300 transition hover:border-purple-400/60 hover:text-white"
                   >
-                    <FaGithub className="h-5 w-5 text-gray-300 transition hover:text-white" />
+                    <FaGithub className="h-5 w-5" />
                   </a>
 
                   <a
@@ -258,8 +263,9 @@ const ProjectSection = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${project.title} Live Demo`}
+                    className="inline-flex min-h-11 min-w-11 touch-manipulation items-center justify-center rounded-xl border border-white/10 text-gray-300 transition hover:border-purple-400/60 hover:text-white"
                   >
-                    <ExternalLink className="h-5 w-5 text-gray-300 transition hover:text-white" />
+                    <ExternalLink className="h-5 w-5" />
                   </a>
                 </div>
               </div>
@@ -276,7 +282,7 @@ const ProjectSection = () => {
             <button
               type="button"
               onClick={() => setShowAll(!showAll)}
-              className="relative z-40 flex items-center gap-3 rounded-xl border border-purple-400/60 bg-purple-600/10 px-8 py-4 font-medium text-white transition hover:bg-purple-600/30"
+              className="min-h-11 touch-manipulation rounded-xl border border-purple-400/60 bg-purple-600/10 px-8 py-4 font-medium text-white transition hover:bg-purple-600/30"
             >
               {showAll ? 'Show Less' : 'View More Projects'}
               <ArrowRight className={`h-5 w-5 transition ${showAll ? '-rotate-90' : ''}`} />
