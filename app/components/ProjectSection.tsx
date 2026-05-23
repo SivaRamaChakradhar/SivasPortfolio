@@ -41,7 +41,7 @@ const projects = [
     id: 3,
     title: 'Jobby App',
     description: 'A job search platform with login authentication, job filters, detailed job pages, and protected routes.',
-    imageUrl: '/JobbyAppBanner.png',
+    imageUrl: '/jobbyAppBanner.png',
     projectUrl: 'https://sivaramachakradhar.github.io/JobbyApp/',
     githubUrl: 'https://github.com/SivaRamaChakradhar/JobbyApp',
     category: 'WEB',
@@ -152,7 +152,7 @@ const ProjectSection = () => {
   return (
     <motion.section
       id="Projects"
-      className="relative isolate min-h-screen w-full overflow-hidden px-6 py-20 text-white"
+      className="relative isolate min-h-screen w-full overflow-x-hidden px-6 py-20 text-white"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
@@ -281,11 +281,14 @@ const ProjectSection = () => {
           >
             <button
               type="button"
-              onClick={() => setShowAll(!showAll)}
-              className="min-h-11 touch-manipulation rounded-xl border border-purple-400/60 bg-purple-600/10 px-8 py-4 font-medium text-white transition hover:bg-purple-600/30"
+              onClick={() => setShowAll((prev) => !prev)}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-purple-400/50 bg-purple-600/20 px-6 py-3 text-sm font-semibold leading-none text-white transition-all duration-300 hover:bg-purple-600 hover:shadow-[0_0_25px_rgba(168,85,247,0.45)]"
             >
-              {showAll ? 'Show Less' : 'View More Projects'}
-              <ArrowRight className={`h-5 w-5 transition ${showAll ? '-rotate-90' : ''}`} />
+              <span className="leading-none">
+                {showAll ? "Show Less" : "View More Projects"}
+              </span>
+
+              <ArrowRight className="h-4 w-4 shrink-0 translate-y-[1px]" />
             </button>
           </motion.div>
         )}
