@@ -91,7 +91,7 @@ const projects = [
     id: 8,
     title: 'Wikipedia Search App',
     description: 'A search application that fetches Wikipedia results using API calls and displays useful links instantly.',
-    imageUrl: '/WikipediaBanner.png',
+    imageUrl: '/wikipediaBanner.png',
     projectUrl: 'https://sivaramachakradhar.github.io/WikipediaSearchApplication/',
     githubUrl: 'https://github.com/SivaRamaChakradhar/WikipediaSearchApplication',
     category: 'MINI PROJECTS',
