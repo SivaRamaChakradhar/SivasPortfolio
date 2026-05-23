@@ -233,6 +233,18 @@ const IdentityGate = ({ children }: IdentityGateProps) => {
             <span>Let&apos;s Get Started</span>
           </button>
 
+          <button
+            type="button"
+            className="skip-btn"
+            onClick={() => {
+              localStorage.setItem(VISITOR_NAME_KEY, "Visitor");
+              localStorage.setItem(VISITOR_ROLE_KEY, "Visitor");
+              startLoading();
+            }}
+          >
+            Skip for now
+          </button>
+
           {error ? (
             <div id="gate-error" className="error-message" role="alert">
               {error}

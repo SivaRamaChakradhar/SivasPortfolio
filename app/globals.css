@@ -677,6 +677,20 @@ section {
   .learning-pill p {
     font-size: 0.9rem;
   }
+
+  .skip-btn {
+    margin-top: 12px;
+    background: transparent;
+    border: none;
+    color: #a78bfa;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .skip-btn:hover {
+    opacity: 0.75;
+  }
 }
 
 @keyframes fadeInUp {
